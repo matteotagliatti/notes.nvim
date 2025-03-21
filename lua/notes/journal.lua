@@ -25,12 +25,12 @@ end
 function M.setup_journal(keymap, journal_file, daily_notes_keymap, daily_notes_dir)
     -- Set up the keybinding for opening journal
     vim.keymap.set('n', keymap, function()
-        open_journal(journal_file or 'journal.md')
+        open_journal(journal_file)
     end, { desc = '[N]ote [J]ournal: Open/Create journal' })
 
     -- Set up the keybinding for opening daily note
     vim.keymap.set('n', daily_notes_keymap, function()
-        open_daily_note(daily_notes_dir or 'daily')
+        open_daily_note(daily_notes_dir)
     end, { desc = '[N]ote [D]aily: Open/Create daily note' })
 end
 

@@ -30,14 +30,29 @@ The plugin comes with a default configuration. You can override the default conf
 ```lua
 {
     keymaps = {
-        follow_link = "<leader>nf",
-        show_tags = "<leader>nt",
+        follow_link = "<leader>nf",  -- default keybinding for following wiki links
+        show_tags = "<leader>nt",    -- default keybinding for showing tags
+        journal = "<leader>nj",      -- default keybinding for opening journal
+        daily_note = "<leader>nd",   -- default keybinding for opening daily note
+        formatting = {
+            bold = "<leader>b",      -- default keybinding for bold in visual mode
+            italic = "<leader>i",    -- default keybinding for italic in visual mode
+            underline = "<leader>u", -- default keybinding for underline in visual mode
+        }
     },
     highlights = {
         wikilink = {
-            fg = nil,
+            fg = nil, -- nil means use the default colorscheme
             underline = true,
         }
+    },
+    journal = {
+        file = "journal.md",       -- default journal file name
+        daily_notes_dir = "daily", -- default directory for daily notes
+    },
+    utils = {
+        date_format = '%Y-%m-%d', -- default date format
+        time_format = '%H:%M:%S', -- default time format
     }
 }
 ```
@@ -47,7 +62,6 @@ The plugin comes with a default configuration. You can override the default conf
 ### Commands
 
 - `:Frontmatter` - Insert a frontmatter with the current `date` and the `tags`
-
 - `:Today` - Insert the current date in the format `YYYY-MM-DD`
 - `:Yesterday` - Insert the date of yesterday in the format `YYYY-MM-DD`
 - `:Now` - Insert the current time in the format `HH:MM:SS`
@@ -55,8 +69,7 @@ The plugin comes with a default configuration. You can override the default conf
 
 ### Wikilinks
 
-- `<leader>nf` - Follow a wikilink.
-- `[[Note Title]]` - Create a wikilink to a note with the title `Note Title`.
+- `<leader>nf` - Follow a wikilink. Wikilinks are created by using the `[[Note Title]]` syntax. This will create a link to the note with the title `Note Title`.
 
 ### Tags
 
