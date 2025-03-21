@@ -1,9 +1,5 @@
 local M = {}
-
--- Function to get today's date in YYYY-MM-DD format
-local function get_today_date()
-    return os.date('%Y-%m-%d')
-end
+local utils = require('notes.utils')
 
 -- Function to open or create journal file
 local function open_journal(journal_file)
@@ -19,7 +15,7 @@ local function open_daily_note(daily_notes_dir)
     end
 
     -- Create the daily note filename
-    local filename = get_today_date() .. '.md'
+    local filename = utils.get_today_date() .. '.md'
     local filepath = daily_notes_dir .. '/' .. filename
 
     -- Open the file

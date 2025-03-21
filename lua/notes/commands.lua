@@ -1,31 +1,32 @@
 local M = {}
+local utils = require('notes.utils')
 
 -- Function to create all commands
 function M.setup_commands()
     -- Date/Time related commands
     vim.api.nvim_create_user_command('Today', function()
-        local date = os.date('%Y-%m-%d')
+        local date = utils.get_today_date()
         vim.api.nvim_put({ date }, 'c', true, true)
     end, {})
 
     vim.api.nvim_create_user_command('Yesterday', function()
-        local date = os.date('%Y-%m-%d', os.time() - 86400)
+        local date = utils.get_yesterday_date()
         vim.api.nvim_put({ date }, 'c', true, true)
     end, {})
 
     vim.api.nvim_create_user_command('Now', function()
-        local time = os.date('%H:%M:%S')
+        local time = utils.get_current_time()
         vim.api.nvim_put({ time }, 'c', true, true)
     end, {})
 
     vim.api.nvim_create_user_command('DateTime', function()
-        local date = os.date('%Y-%m-%d')
-        local time = os.date('%H:%M:%S')
+        local date = utils.get_today_date()
+        local time = utils.get_current_time()
         vim.api.nvim_put({ date .. ' ' .. time }, 'c', true, true)
     end, {})
 
     vim.api.nvim_create_user_command('Frontmatter', function()
-        local date = os.date('%Y-%m-%d')
+        local date = utils.get_today_date()
         local header = {
             '---',
             'tags:',

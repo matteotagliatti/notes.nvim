@@ -22,6 +22,10 @@ local config = {
     journal = {
         file = "journal.md",       -- default journal file name
         daily_notes_dir = "daily", -- default directory for daily notes
+    },
+    utils = {
+        date_format = '%Y-%m-%d', -- default date format
+        time_format = '%H:%M:%S', -- default time format
     }
 }
 
@@ -31,6 +35,9 @@ function M.setup(opts)
     config = vim.tbl_deep_extend('force', config, opts or {})
 
     -- Setups
+    local utils = require('notes.utils')
+    utils.setup(config.utils)
+
     local commands = require('notes.commands')
     commands.setup_commands()
 
