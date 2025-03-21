@@ -26,11 +26,9 @@ function M.setup_commands()
     end, {})
 
     vim.api.nvim_create_user_command('Frontmatter', function()
-        local date = utils.get_today_date()
         local header = {
             '---',
             'tags:',
-            'date: ' .. date,
             '---'
         }
         local bufnr = vim.api.nvim_get_current_buf()
