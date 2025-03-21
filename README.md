@@ -64,3 +64,8 @@ Supports tags inside the frontmatter and hashtags in the content.
 
 - `<leader>nt` - Open a floating window with all the tags in the current directory and subdirectories. Press `<CR>` to open the selected tag in Telescope.
 - `:Tag <tag>` - Open a Telescope prompt to search for files with the tag `<tag>`.
+
+### Journal
+
+- `<leader>nj` - Open the journal file.
+- `<leader>nd` - Open the daily note file.
