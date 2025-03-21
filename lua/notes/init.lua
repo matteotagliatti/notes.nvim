@@ -4,19 +4,24 @@ local M = {}
 local config = {
     keymaps = {
         follow_link = "<leader>nf",  -- default keybinding for following wiki links
-        show_tags = "<leader>nt",  -- default keybinding for showing tags
-        journal = "<leader>nj",  -- default keybinding for opening journal
-        daily_note = "<leader>nd",  -- default keybinding for opening daily note
+        show_tags = "<leader>nt",    -- default keybinding for showing tags
+        journal = "<leader>nj",      -- default keybinding for opening journal
+        daily_note = "<leader>nd",   -- default keybinding for opening daily note
+        formatting = {
+            bold = "<leader>b",      -- default keybinding for bold in visual mode
+            italic = "<leader>i",    -- default keybinding for italic in visual mode
+            underline = "<leader>u", -- default keybinding for underline in visual mode
+        }
     },
     highlights = {
         wikilink = {
-            fg = nil,  -- nil means use the default colorscheme
+            fg = nil, -- nil means use the default colorscheme
             underline = true,
         }
     },
     journal = {
-        file = "journal.md",  -- default journal file name
-        daily_notes_dir = "daily",  -- default directory for daily notes
+        file = "journal.md",       -- default journal file name
+        daily_notes_dir = "daily", -- default directory for daily notes
     }
 }
 
@@ -24,11 +29,11 @@ local config = {
 function M.setup(opts)
     -- Merge user configuration with defaults
     config = vim.tbl_deep_extend('force', config, opts or {})
-    
+
     -- Setups
     local commands = require('notes.commands')
     commands.setup_commands()
-    
+
     local wikilinks = require('notes.wikilinks')
     wikilinks.setup_wikilinks(config.keymaps.follow_link, config.highlights.wikilink)
 
@@ -42,6 +47,9 @@ function M.setup(opts)
         config.keymaps.daily_note,
         config.journal.daily_notes_dir
     )
+
+    local formatting = require('notes.formatting')
+    formatting.setup_formatting(config.keymaps.formatting)
 end
 
 return M
