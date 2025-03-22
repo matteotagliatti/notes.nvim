@@ -13,20 +13,18 @@ local config = {
             wikilink = "<leader>w", -- wikilink in visual mode
         }
     },
-    highlights = {
-        wikilink = {
-            fg = nil, -- nil means use the default colorscheme
-            underline = true,
-            space_replacement = "_",
-        }
+    wikilink = {
+        fg = nil, -- nil means use the default colorscheme
+        underline = true,
+        space_replacement = "_",
     },
     journal = {
-        file = "journal.md",       -- default journal file name
-        daily_notes_dir = "daily", -- default directory for daily notes
+        file = "journal.md",       -- journal file name
+        daily_notes_dir = "daily", -- directory for daily notes
     },
     utils = {
-        date_format = '%Y-%m-%d', -- default date format
-        time_format = '%H:%M:%S', -- default time format
+        date_format = '%Y-%m-%d', -- date format
+        time_format = '%H:%M:%S', -- time format
     }
 }
 
@@ -43,7 +41,7 @@ function M.setup(opts)
     commands.setup_commands()
 
     local wikilinks = require('notes.wikilinks')
-    wikilinks.setup_wikilinks(config.keymaps.follow_link, config.highlights.wikilink)
+    wikilinks.setup_wikilinks(config.keymaps.follow_link, config.wikilink)
 
     local tags = require('notes.tags')
     tags.setup_tags(config.keymaps.show_tags)
