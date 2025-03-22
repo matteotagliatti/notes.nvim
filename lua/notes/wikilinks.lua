@@ -2,6 +2,9 @@ local M = {}
 
 -- Function to setup wiki-style links
 function M.setup_wikilinks(keymap, highlight_config)
+    -- Default to underscore if no replacement character is specified
+    local space_replacement = highlight_config.space_replacement or "_"
+
     vim.api.nvim_create_autocmd("FileType", {
         pattern = { "markdown", "text" },
         desc = "Setup wiki-style links",
@@ -12,7 +15,7 @@ function M.setup_wikilinks(keymap, highlight_config)
                 local line = vim.fn.getline(".")
                 local link = string.match(line, "%[%[(.+)%]%]")
                 if link then
-                    local filename = string.gsub(link, " ", "_") .. ".md"
+                    local filename = string.gsub(link, " ", space_replacement) .. ".md"
                     -- Check if file exists
                     if vim.fn.filereadable(filename) == 0 then
                         -- Create new file with a basic template

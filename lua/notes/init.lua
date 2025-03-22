@@ -3,20 +3,21 @@ local M = {}
 -- Default configuration
 local config = {
     keymaps = {
-        follow_link = "<leader>nf", -- default keybinding for following wiki links
-        show_tags = "<leader>nt",   -- default keybinding for showing tags
-        journal = "<leader>nj",     -- default keybinding for opening journal
-        daily_note = "<leader>nd",  -- default keybinding for opening daily note
+        follow_link = "<leader>nf", -- following wiki links
+        show_tags = "<leader>nt",   -- showing tags
+        journal = "<leader>nj",     -- opening journal
+        daily_note = "<leader>nd",  -- opening daily note
         formatting = {
-            bold = "<leader>b",     -- default keybinding for bold in visual mode
-            italic = "<leader>i",   -- default keybinding for italic in visual mode
-            wikilink = "<leader>w", -- default keybinding for wikilink in visual mode
+            bold = "<leader>b",     -- bold in visual mode
+            italic = "<leader>i",   -- italic in visual mode
+            wikilink = "<leader>w", -- wikilink in visual mode
         }
     },
     highlights = {
         wikilink = {
             fg = nil, -- nil means use the default colorscheme
             underline = true,
+            space_replacement = "_",
         }
     },
     journal = {
