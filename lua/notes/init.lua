@@ -3,14 +3,14 @@ local M = {}
 -- Default configuration
 local config = {
     keymaps = {
-        follow_link = "<leader>nf",  -- default keybinding for following wiki links
-        show_tags = "<leader>nt",    -- default keybinding for showing tags
-        journal = "<leader>nj",      -- default keybinding for opening journal
-        daily_note = "<leader>nd",   -- default keybinding for opening daily note
+        follow_link = "<leader>nf", -- default keybinding for following wiki links
+        show_tags = "<leader>nt",   -- default keybinding for showing tags
+        journal = "<leader>nj",     -- default keybinding for opening journal
+        daily_note = "<leader>nd",  -- default keybinding for opening daily note
         formatting = {
-            bold = "<leader>b",      -- default keybinding for bold in visual mode
-            italic = "<leader>i",    -- default keybinding for italic in visual mode
-            underline = "<leader>u", -- default keybinding for underline in visual mode
+            bold = "<leader>b",     -- default keybinding for bold in visual mode
+            italic = "<leader>i",   -- default keybinding for italic in visual mode
+            wikilink = "<leader>w", -- default keybinding for wikilink in visual mode
         }
     },
     highlights = {

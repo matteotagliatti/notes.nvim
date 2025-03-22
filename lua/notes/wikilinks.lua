@@ -13,6 +13,11 @@ function M.setup_wikilinks(keymap, highlight_config)
                 local link = string.match(line, "%[%[(.+)%]%]")
                 if link then
                     local filename = string.gsub(link, " ", "_") .. ".md"
+                    -- Check if file exists
+                    if vim.fn.filereadable(filename) == 0 then
+                        -- Create new file with a basic template
+                        vim.fn.writefile({ "# " .. link }, filename)
+                    end
                     vim.cmd("edit " .. filename)
                 end
             end, { buffer = true, desc = "[N]otes: [F]ollow link" })
