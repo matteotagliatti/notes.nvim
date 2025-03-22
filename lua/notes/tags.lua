@@ -145,98 +145,49 @@ local function show_tags()
         table.insert(content, string.format("%s (%d)", data.tag, data.count))
     end
 
-    -- Calculate window dimensions
-    local width = 0
-    for _, line in ipairs(content) do
-        width = math.max(width, vim.fn.strdisplaywidth(line))
-    end
-    width = width + 20 -- Add padding
-
-    local height = #content
-    height = math.min(height, 20) -- Cap height at 20 lines
-
-    -- Get the current window dimensions
-    local win_width = vim.api.nvim_win_get_width(0)
-    local win_height = vim.api.nvim_win_get_height(0)
-
-    -- Calculate position to center the window
-    local row = math.floor((win_height - height) / 2)
-    local col = math.floor((win_width - width) / 2)
-
-    -- Create the floating window
-    local bufnr = vim.api.nvim_create_buf(false, true)
-    local win_id = vim.api.nvim_open_win(bufnr, true, {
-        relative = "editor",
-        width = width,
-        height = height,
-        row = row,
-        col = col,
-        style = "minimal",
-        border = "rounded",
-        title = " Notes Tags ",
-        title_pos = "center"
+    -- Create a custom picker
+    local pickers = require('telescope.pickers')
+    local finders = require('telescope.finders')
+    local conf = require('telescope.config').values
+    local actions = require('telescope.actions')
+    local state = require('telescope.actions.state')
+    local themes = require('telescope.themes').get_dropdown({
+        previewer = false,
+        winblend = 10,
     })
 
-    -- Set buffer options
-    vim.api.nvim_buf_set_option(bufnr, 'modifiable', true)
-    vim.api.nvim_buf_set_option(bufnr, 'buftype', 'nofile')
-    vim.api.nvim_buf_set_option(bufnr, 'swapfile', false)
-    vim.api.nvim_buf_set_option(bufnr, 'filetype', 'notes_tags')
+    pickers.new(themes, {
+        prompt_title = "Notes Tags",
+        finder = finders.new_table({
+            results = content,
+        }),
+        sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, map)
+            actions.select_default:replace(function()
+                local selection = state.get_selected_entry()
+                if selection then
+                    local tag = string.match(selection[1], "([^(]+)")
+                    if tag then
+                        tag = vim.trim(tag)
+                        local files = get_files_with_tag(tag)
 
-    -- Set window options
-    vim.api.nvim_win_set_option(win_id, 'cursorline', true)
-    vim.api.nvim_win_set_option(win_id, 'number', false)
-    vim.api.nvim_win_set_option(win_id, 'relativenumber', false)
-    vim.api.nvim_win_set_option(win_id, 'foldcolumn', '0')
-    vim.api.nvim_win_set_option(win_id, 'signcolumn', 'no')
-
-    -- Set the content
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, content)
-    vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
-
-    -- Add keymaps to close the window
-    local function close_window()
-        vim.api.nvim_win_close(win_id, true)
-    end
-
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', '', {
-        callback = close_window,
-        noremap = true
-    })
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Esc>', '', {
-        callback = close_window,
-        noremap = true
-    })
-
-    -- Add keymap to search for files with selected tag
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<CR>', '', {
-        callback = function()
-            local line = vim.api.nvim_get_current_line()
-            local tag = string.match(line, "([^(]+)")
-            if tag then
-                tag = vim.trim(tag)
-                local files = get_files_with_tag(tag)
-                close_window()
-
-                -- Open Telescope with only the files containing the tag
-                require('telescope.builtin').find_files({
-                    prompt_title = "Notes with tag: " .. tag,
-                    search_dirs = files,
-                    find_command = nil, -- Use default find command
-                    attach_mappings = function(prompt_bufnr, map)
-                        local actions = require('telescope.actions')
-                        map('i', '<CR>', actions.select_default)
-                        map('n', '<CR>', actions.select_default)
-                        return true
-                    end,
-                })
-            end
+                        -- Open another Telescope with files containing the tag
+                        require('telescope.builtin').find_files({
+                            prompt_title = "Notes with tag: " .. tag,
+                            search_dirs = files,
+                            find_command = nil,
+                            attach_mappings = function(_, map)
+                                map('i', '<CR>', actions.select_default)
+                                map('n', '<CR>', actions.select_default)
+                                return true
+                            end,
+                        })
+                    end
+                end
+            end)
+            return true
         end,
-        noremap = true
-    })
-
-    -- Set the cursor to the first line
-    vim.api.nvim_win_set_cursor(win_id, { 1, 0 })
+    }):find()
 end
 
 -- Function to search files by tag using Telescope
