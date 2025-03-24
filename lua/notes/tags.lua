@@ -162,7 +162,7 @@ local function show_tags()
             results = content,
         }),
         sorter = conf.generic_sorter({}),
-        attach_mappings = function(prompt_bufnr, map)
+        attach_mappings = function()
             actions.select_default:replace(function()
                 local selection = state.get_selected_entry()
                 if selection then
@@ -208,7 +208,7 @@ local function search_files_by_tag(tag)
         prompt_title = "Notes with tag: " .. tag,
         search_dirs = files,
         find_command = nil, -- Use default find command
-        attach_mappings = function(prompt_bufnr, map)
+        attach_mappings = function(_, map)
             local actions = require('telescope.actions')
             map('i', '<CR>', actions.select_default)
             map('n', '<CR>', actions.select_default)
