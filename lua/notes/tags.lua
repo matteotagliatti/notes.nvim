@@ -105,29 +105,63 @@ local function get_file_tags(filepath)
     return result
 end
 
+-- Function to check if a file has any tags
+local function file_has_any_tags(filepath)
+    local content = vim.fn.readfile(filepath)
+    if not content then return false end
+    content = table.concat(content, "\n")
+
+    -- Check frontmatter
+    local frontmatter = string.match(content, "^%-%-%-\n(.-)\n%-%-%-")
+    if frontmatter then
+        local tag_line = string.match(frontmatter, "tags: ([^\n]+)")
+        if tag_line and tag_line ~= "" then
+            return true
+        end
+    end
+
+    -- Check hashtags
+    local has_hashtag = string.match(content, "#([%w-]+)")
+    return has_hashtag ~= nil
+end
+
 -- Function to get all tags from all markdown files in the current directory and subdirectories
 local function get_all_tags()
     local tags = {}
     -- Use find command to recursively get all markdown files
     local files = vim.fn.systemlist('find . -type f -name "*.md"')
+    local untagged_count = 0
 
     -- First pass: collect all tags and their counts
     for _, file in ipairs(files) do
         local file_tags = get_file_tags(file)
-        for _, tag in ipairs(file_tags) do
-            if not tags[tag] then
-                tags[tag] = 0
+        if #file_tags == 0 then
+            untagged_count = untagged_count + 1
+        else
+            for _, tag in ipairs(file_tags) do
+                if not tags[tag] then
+                    tags[tag] = 0
+                end
+                tags[tag] = tags[tag] + 1
             end
-            tags[tag] = tags[tag] + 1
         end
     end
 
     -- Convert to array of {tag, count} pairs and sort by tag name
     local result = {}
+    -- Add untagged category if there are untagged files
+    if untagged_count > 0 then
+        table.insert(result, { tag = "[untagged]", count = untagged_count })
+    end
     for tag, count in pairs(tags) do
         table.insert(result, { tag = tag, count = count })
     end
-    table.sort(result, function(a, b) return a.tag < b.tag end)
+    table.sort(result, function(a, b) 
+        -- Keep [untagged] at the top
+        if a.tag == "[untagged]" then return true end
+        if b.tag == "[untagged]" then return false end
+        return a.tag < b.tag 
+    end)
     return result
 end
 
@@ -169,11 +203,24 @@ local function show_tags()
                     local tag = string.match(selection[1], "([^(]+)")
                     if tag then
                         tag = vim.trim(tag)
-                        local files = get_files_with_tag(tag)
+                        local files = {}
+                        
+                        if tag == "[untagged]" then
+                            -- Get all markdown files
+                            local all_files = vim.fn.systemlist('find . -type f -name "*.md"')
+                            -- Filter for files without tags
+                            for _, file in ipairs(all_files) do
+                                if not file_has_any_tags(file) then
+                                    table.insert(files, file)
+                                end
+                            end
+                        else
+                            files = get_files_with_tag(tag)
+                        end
 
                         -- Open another Telescope with files containing the tag
                         require('telescope.builtin').find_files({
-                            prompt_title = "Notes with tag: " .. tag,
+                            prompt_title = tag == "[untagged]" and "Untagged Notes" or "Notes with tag: " .. tag,
                             search_dirs = files,
                             find_command = nil,
                             attach_mappings = function(_, map)
@@ -197,7 +244,20 @@ local function search_files_by_tag(tag)
         return
     end
 
-    local files = get_files_with_tag(tag)
+    local files = {}
+    if tag == "[untagged]" then
+        -- Get all markdown files
+        local all_files = vim.fn.systemlist('find . -type f -name "*.md"')
+        -- Filter for files without tags
+        for _, file in ipairs(all_files) do
+            if not file_has_any_tags(file) then
+                table.insert(files, file)
+            end
+        end
+    else
+        files = get_files_with_tag(tag)
+    end
+
     if #files == 0 then
         vim.notify("No files found with tag: " .. tag, vim.log.levels.INFO)
         return
@@ -205,7 +265,7 @@ local function search_files_by_tag(tag)
 
     -- Open Telescope with only the files containing the tag
     require('telescope.builtin').find_files({
-        prompt_title = "Notes with tag: " .. tag,
+        prompt_title = tag == "[untagged]" and "Untagged Notes" or "Notes with tag: " .. tag,
         search_dirs = files,
         find_command = nil, -- Use default find command
         attach_mappings = function(_, map)
