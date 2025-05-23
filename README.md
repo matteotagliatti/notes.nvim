@@ -25,15 +25,18 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Default Configuration
 
-The plugin comes with a default configuration. You can override the default configuration by passing a table to the `setup` function.
+The plugin comes with a default configuration. You can override the default configuration by passing a table to the `setup` function. You can also access the default configuration via `require('notes').defaults`.
 
 ```lua
 {
     keymaps = {
         follow_link = "<leader>nf", -- following wiki links
         show_tags = "<leader>nt",   -- showing tags
-        journal = "<leader>nj",     -- opening journal
-        daily_note = "<leader>nd",  -- opening daily note
+        journal = {
+            today = "<leader>njj",     -- opening journal for today
+            yesterday = "<leader>njy", -- opening journal for yesterday
+            tomorrow = "<leader>njt",  -- opening journal for tomorrow
+        },
         formatting = {
             bold = "<leader>b",     -- bold in visual mode
             italic = "<leader>i",   -- italic in visual mode
@@ -46,8 +49,7 @@ The plugin comes with a default configuration. You can override the default conf
         space_replacement = "_",
     },
     journal = {
-        file = "journal.md",       -- journal file name
-        daily_notes_dir = "daily", -- directory for daily notes
+        dir = "journal", -- directory for journal entries
     },
     utils = {
         date_format = '%Y-%m-%d', -- date format
@@ -85,5 +87,6 @@ Supports tags inside the frontmatter and hashtags in the content.
 
 ### Journal
 
-- `<leader>nj` - Open the journal file.
-- `<leader>nd` - Open the daily note file.
+- `<leader>njj` - Open today's journal entry
+- `<leader>njy` - Open yesterday's journal entry
+- `<leader>njt` - Open tomorrow's journal entry
