@@ -1,37 +1,54 @@
 local M = {}
 local utils = require('notes.utils')
 
--- Function to open or create journal file
-local function open_journal(journal_file)
-    -- Open the file
-    vim.cmd('edit ' .. journal_file)
-end
-
--- Function to open or create daily note
-local function open_daily_note(daily_notes_dir)
-    -- Ensure the directory exists
-    if vim.fn.isdirectory(daily_notes_dir) == 0 then
-        vim.fn.mkdir(daily_notes_dir, 'p')
+local function open_journal_for_date(journal_dir, date_offset)
+    date_offset = date_offset or 0
+    
+    if vim.fn.isdirectory(journal_dir) == 0 then
+        vim.fn.mkdir(journal_dir, 'p')
     end
 
-    -- Create the daily note filename
-    local filename = utils.get_today_date() .. '.md'
-    local filepath = daily_notes_dir .. '/' .. filename
+    local date
+    if date_offset == 0 then
+        date = utils.get_today_date()
+    else
+        date = utils.get_date_with_offset(date_offset)
+    end
 
-    -- Open the file
+    local filename = date .. '.md'
+    local filepath = journal_dir .. '/' .. filename
+
     vim.cmd('edit ' .. filepath)
 end
 
-function M.setup_journal(keymap, journal_file, daily_notes_keymap, daily_notes_dir)
-    -- Set up the keybinding for opening journal
-    vim.keymap.set('n', keymap, function()
-        open_journal(journal_file)
-    end, { desc = '[N]ote [J]ournal: Open/Create journal' })
+local function open_journal(journal_dir)
+    open_journal_for_date(journal_dir, 0)
+end
 
-    -- Set up the keybinding for opening daily note
-    vim.keymap.set('n', daily_notes_keymap, function()
-        open_daily_note(daily_notes_dir)
-    end, { desc = '[N]ote [D]aily: Open/Create daily note' })
+local function open_yesterday_journal(journal_dir)
+    open_journal_for_date(journal_dir, -1)
+end
+
+local function open_tomorrow_journal(journal_dir)
+    open_journal_for_date(journal_dir, 1)
+end
+
+function M.setup_journal(keymap, journal_dir, yesterday_keymap, tomorrow_keymap)
+    vim.keymap.set('n', keymap, function()
+        open_journal(journal_dir)
+    end, { desc = '[N]ote [J]ournal: Open/Create journal entry for today' })
+
+    if yesterday_keymap then
+        vim.keymap.set('n', yesterday_keymap, function()
+            open_yesterday_journal(journal_dir)
+        end, { desc = '[N]ote [J]ournal: Open/Create journal entry for yesterday' })
+    end
+
+    if tomorrow_keymap then
+        vim.keymap.set('n', tomorrow_keymap, function()
+            open_tomorrow_journal(journal_dir)
+        end, { desc = '[N]ote [J]ournal: Open/Create journal entry for tomorrow' })
+    end
 end
 
 return M

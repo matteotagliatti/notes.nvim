@@ -5,8 +5,11 @@ local config = {
     keymaps = {
         follow_link = "<leader>nf", -- following wiki links
         show_tags = "<leader>nt",   -- showing tags
-        journal = "<leader>nj",     -- opening journal
-        daily_note = "<leader>nd",  -- opening daily note
+        journal = {
+            today = "<leader>njj",     -- opening journal for today
+            yesterday = "<leader>njy", -- opening journal for yesterday
+            tomorrow = "<leader>njt",  -- opening journal for tomorrow
+        },
         formatting = {
             bold = "<leader>b",     -- bold in visual mode
             italic = "<leader>i",   -- italic in visual mode
@@ -19,8 +22,7 @@ local config = {
         space_replacement = "_",
     },
     journal = {
-        file = "journal.md",       -- journal file name
-        daily_notes_dir = "daily", -- directory for daily notes
+        dir = "journal", -- directory for journal entries
     },
     utils = {
         date_format = '%Y-%m-%d', -- date format
@@ -48,10 +50,10 @@ function M.setup(opts)
 
     local journal = require('notes.journal')
     journal.setup_journal(
-        config.keymaps.journal,
-        config.journal.file,
-        config.keymaps.daily_note,
-        config.journal.daily_notes_dir
+        config.keymaps.journal.today,
+        config.journal.dir,
+        config.keymaps.journal.yesterday,
+        config.keymaps.journal.tomorrow
     )
 
     local formatting = require('notes.formatting')

@@ -23,4 +23,9 @@ function M.get_current_time()
   return os.date(config.time_format)
 end
 
+-- Function to get date with a specific day offset (can be negative or positive)
+function M.get_date_with_offset(days_offset)
+  return os.date(config.date_format, os.time() + (days_offset * 86400))
+end
+
 return M
