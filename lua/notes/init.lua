@@ -1,7 +1,7 @@
 local M = {}
 
 -- Default configuration
-local config = {
+local default_config = {
     keymaps = {
         follow_link = "<leader>nf", -- following wiki links
         show_tags = "<leader>nt",   -- showing tags
@@ -30,10 +30,8 @@ local config = {
     }
 }
 
--- Setup function
 function M.setup(opts)
-    -- Merge user configuration with defaults
-    config = vim.tbl_deep_extend('force', config, opts or {})
+    local config = vim.tbl_deep_extend('force', default_config, opts or {}) -- Merge user configuration with defaults
 
     -- Setups
     local utils = require('notes.utils')
@@ -59,5 +57,7 @@ function M.setup(opts)
     local formatting = require('notes.formatting')
     formatting.setup_formatting(config.keymaps.formatting)
 end
+
+M.defaults = default_config
 
 return M
