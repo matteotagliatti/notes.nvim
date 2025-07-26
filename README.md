@@ -37,11 +37,6 @@ The plugin comes with a default configuration. You can override the default conf
             yesterday = "<leader>njy", -- opening journal for yesterday
             tomorrow = "<leader>njt",  -- opening journal for tomorrow
         },
-        formatting = {
-            bold = "<leader>b",     -- bold in visual mode
-            italic = "<leader>i",   -- italic in visual mode
-            wikilink = "<leader>w", -- wikilink in visual mode
-        }
     },
     wikilink = {
         fg = nil, -- nil means use the default colorscheme
@@ -67,12 +62,6 @@ The plugin comes with a default configuration. You can override the default conf
 - `:Yesterday` - Insert the date of yesterday in the format specified in the configuration
 - `:Now` - Insert the current time in the format specified in the configuration
 - `:DateTime` - Insert the current date and time in the format specified in the configuration
-
-### Formatting
-
-- `<leader>b` - Make the selected text bold in visual mode
-- `<leader>i` - Make the selected text italic in visual mode
-- `<leader>w` - Create or open a wikilink with the selected text in visual mode
 
 ### Wikilinks
 
