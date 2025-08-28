@@ -77,6 +77,8 @@ Supports tags inside the frontmatter and hashtags in the content.
 
 - `<leader>nt` - Open a Telescope prompt with all the tags in the current directory and subdirectories. Press `<CR>` and a new Telescope prompt will open to search for files with the selected tag.
 - `:Tag <tag>` - Open a Telescope prompt to search for files with the tag `<tag>`.
+- `:TagsByDate <tag>` - Open a Telescope prompt showing files with the specified tag, ordered by date in frontmatter (most recent first). Files with dates appear first, followed by files without dates (alphabetically sorted).
+- `:TagsForYear <tag> <year>` - Show count of files with the specified tag for a given year (e.g., `:TagsForYear book 2025`). Optionally browse and open the matching files.
 
 ### Journal
 
