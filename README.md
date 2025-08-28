@@ -32,6 +32,7 @@ The plugin comes with a default configuration. You can override the default conf
     keymaps = {
         follow_link = "<leader>nf", -- following wiki links
         show_tags = "<leader>nt",   -- showing tags
+        media = "<leader>nm",       -- create new media entry
         journal = {
             today = "<leader>njj",     -- opening journal for today
             yesterday = "<leader>njy", -- opening journal for yesterday
@@ -41,14 +42,17 @@ The plugin comes with a default configuration. You can override the default conf
     wikilink = {
         fg = nil, -- nil means use the default colorscheme
         underline = true,
-        space_replacement = "_",
     },
     journal = {
         dir = "journal", -- directory for journal entries
     },
+    media = {
+        dir = "media", -- directory for media entries
+    },
     utils = {
         date_format = '%Y-%m-%d', -- date format
         time_format = '%H:%M:%S', -- time format
+        space_replacement = "-",  -- space replacement character for filenames
     }
 }
 ```
@@ -79,3 +83,12 @@ Supports tags inside the frontmatter and hashtags in the content.
 - `<leader>njj` - Open today's journal entry
 - `<leader>njy` - Open yesterday's journal entry
 - `<leader>njt` - Open tomorrow's journal entry
+
+### Media
+
+- `<leader>nm` - Create a new media entry (book or movie). This will prompt you for:
+  - Media type (book/movie)
+  - Title
+  - Author
+  - Automatically uses today's date
+  - Creates a markdown file in the media directory with structured frontmatter

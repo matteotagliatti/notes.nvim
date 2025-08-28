@@ -28,4 +28,9 @@ function M.get_date_with_offset(days_offset)
 	return os.date(config.date_format, os.time() + (days_offset * 86400))
 end
 
+-- Function to get the configured space replacement character
+function M.get_space_replacement()
+	return config.space_replacement or "-"
+end
+
 return M

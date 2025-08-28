@@ -1,8 +1,8 @@
 local M = {}
 
-function M.setup_wikilinks(keymap, highlight_config)
-	-- Default to underscore if no replacement character is specified
-	local space_replacement = highlight_config.space_replacement or "_"
+function M.setup_wikilinks(keymap, highlight_config, space_replacement)
+	-- Default to dash if no replacement character is specified
+	space_replacement = space_replacement or "-"
 
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = { "markdown", "text" },
@@ -21,7 +21,7 @@ function M.setup_wikilinks(keymap, highlight_config)
 						href = link
 						display_text = link
 					end
-					
+
 					-- Use href for filename, display_text for title
 					local filename = string.gsub(href, " ", space_replacement) .. ".md"
 					-- Check if file exists
