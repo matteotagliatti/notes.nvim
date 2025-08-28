@@ -14,11 +14,20 @@ function M.setup_wikilinks(keymap, highlight_config)
 				local line = vim.fn.getline(".")
 				local link = string.match(line, "%[%[(.+)%]%]")
 				if link then
-					local filename = string.gsub(link, " ", space_replacement) .. ".md"
+					-- Check if link contains pipe separator for [[href|display]] format
+					local href, display_text = string.match(link, "^([^|]+)|(.+)$")
+					if not href then
+						-- No pipe found, use the entire link as both href and display
+						href = link
+						display_text = link
+					end
+					
+					-- Use href for filename, display_text for title
+					local filename = string.gsub(href, " ", space_replacement) .. ".md"
 					-- Check if file exists
 					if vim.fn.filereadable(filename) == 0 then
-						-- Create new file with a basic template
-						vim.fn.writefile({ "# " .. link }, filename)
+						-- Create new file with a basic template using display_text for title
+						vim.fn.writefile({ "# " .. display_text }, filename)
 					end
 					vim.cmd("edit " .. filename)
 				end
