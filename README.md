@@ -17,15 +17,13 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
     dependencies = {
         'nvim-telescope/telescope.nvim',
     },
-    config = function()
-        require('notes').setup()
-    end,
+    opts = {}, -- optional, see "Default Configuration" below
 }
 ```
 
 ## Default Configuration
 
-The plugin comes with a default configuration. You can override the default configuration by passing a table to the `setup` function. You can also access the default configuration via `require('notes').defaults`.
+The plugin comes with a default configuration. You can override it by passing your own configuration table to the `opts` field when setting up the plugin.
 
 ```lua
 {
@@ -64,8 +62,6 @@ The plugin comes with a default configuration. You can override the default conf
 - `:Frontmatter` - Insert a frontmatter with `tags:`
 - `:Today` - Insert the current date with format specified in the configuration
 - `:Yesterday` - Insert the date of yesterday in the format specified in the configuration
-- `:Now` - Insert the current time in the format specified in the configuration
-- `:DateTime` - Insert the current date and time in the format specified in the configuration
 
 ### Wikilinks
 

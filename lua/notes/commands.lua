@@ -14,17 +14,6 @@ function M.setup_commands()
 		vim.api.nvim_put({ date }, "c", true, true)
 	end, {})
 
-	vim.api.nvim_create_user_command("Now", function()
-		local time = utils.get_current_time()
-		vim.api.nvim_put({ time }, "c", true, true)
-	end, {})
-
-	vim.api.nvim_create_user_command("DateTime", function()
-		local date = utils.get_today_date()
-		local time = utils.get_current_time()
-		vim.api.nvim_put({ date .. " " .. time }, "c", true, true)
-	end, {})
-
 	vim.api.nvim_create_user_command("Frontmatter", function()
 		local header = {
 			"---",
