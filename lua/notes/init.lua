@@ -19,9 +19,6 @@ local default_config = {
 	journal = {
 		dir = "journal", -- directory for journal entries
 	},
-	media = {
-		dir = "media", -- directory for media entries
-	},
 	utils = {
 		date_format = "%Y-%m-%d", -- date format
 		time_format = "%H:%M:%S", -- time format
@@ -52,9 +49,6 @@ function M.setup(opts)
 		config.keymaps.journal.yesterday,
 		config.keymaps.journal.tomorrow
 	)
-
-	local media = require("notes.media")
-	media.setup_media(config.keymaps.media, config.media.dir)
 end
 
 M.defaults = default_config

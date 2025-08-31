@@ -44,9 +44,6 @@ The plugin comes with a default configuration. You can override it by passing yo
     journal = {
         dir = "journal", -- directory for journal entries
     },
-    media = {
-        dir = "media", -- directory for media entries
-    },
     utils = {
         date_format = '%Y-%m-%d', -- date format
         time_format = '%H:%M:%S', -- time format
@@ -81,12 +78,3 @@ Supports tags inside the frontmatter and hashtags in the content.
 - `<leader>njj` - Open today's journal entry
 - `<leader>njy` - Open yesterday's journal entry
 - `<leader>njt` - Open tomorrow's journal entry
-
-### Media
-
-- `<leader>nm` - Create a new media entry (book or movie). This will prompt you for:
-  - Media type (book/movie)
-  - Title
-  - Author
-  - Automatically uses today's date
-  - Creates a markdown file in the media directory with structured frontmatter
